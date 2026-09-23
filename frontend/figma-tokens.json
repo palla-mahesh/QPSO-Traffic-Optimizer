@@ -1,0 +1,70 @@
+{
+  "version": "1.0.0",
+  "name": "Quantum-Inspired Traffic Route Optimization (Q-TRO) Design Tokens",
+  "author": "Egreen Quanta Design System",
+  "color": {
+    "background": {
+      "canvas": { "value": "#050510", "type": "color", "description": "Deep OLED midnight background" },
+      "surface": { "value": "#0c0d1b", "type": "color", "description": "Card surface color" },
+      "surface-elevated": { "value": "#141628", "type": "color", "description": "Elevated modal/dropdown surface" },
+      "surface-hover": { "value": "#1d2038", "type": "color", "description": "Hover state surface" }
+    },
+    "brand": {
+      "quantum-cyan": { "value": "#00ffff", "type": "color", "description": "Primary quantum accent" },
+      "quantum-purple": { "value": "#7b61ff", "type": "color", "description": "Secondary quantum interference" },
+      "quantum-magenta": { "value": "#ff00ff", "type": "color", "description": "Tertiary accent / highlights" },
+      "quantum-blue": { "value": "#3b82f6", "type": "color", "description": "Standard action blue" }
+    },
+    "text": {
+      "primary": { "value": "#e0e0ff", "type": "color", "description": "High-contrast text" },
+      "secondary": { "value": "#9ca3c9", "type": "color", "description": "Supporting text" },
+      "muted": { "value": "#5f6588", "type": "color", "description": "Muted labels & timestamps" },
+      "inverse": { "value": "#050510", "type": "color", "description": "Text on bright accents" }
+    },
+    "border": {
+      "subtle": { "value": "#1f2238", "type": "color", "description": "Subtle card & divider border" },
+      "default": { "value": "#33334e", "type": "color", "description": "Default component border" },
+      "focus": { "value": "#00ffff", "type": "color", "description": "Active focus ring" }
+    },
+    "traffic": {
+      "free-flow": { "value": "#10b981", "type": "color", "description": "Traffic ratio < 0.6" },
+      "moderate": { "value": "#f59e0b", "type": "color", "description": "Traffic ratio 0.6 - 1.0" },
+      "congested": { "value": "#ef4444", "type": "color", "description": "Traffic ratio > 1.0" },
+      "disruption": { "value": "#dc2626", "type": "color", "description": "Incident / Road closure" }
+    }
+  },
+  "spacing": {
+    "2xs": { "value": "4px", "type": "spacing" },
+    "xs": { "value": "8px", "type": "spacing" },
+    "sm": { "value": "12px", "type": "spacing" },
+    "md": { "value": "16px", "type": "spacing" },
+    "lg": { "value": "24px", "type": "spacing" },
+    "xl": { "value": "32px", "type": "spacing" },
+    "2xl": { "value": "48px", "type": "spacing" }
+  },
+  "borderRadius": {
+    "sm": { "value": "6px", "type": "borderRadius" },
+    "md": { "value": "10px", "type": "borderRadius" },
+    "lg": { "value": "16px", "type": "borderRadius" },
+    "full": { "value": "9999px", "type": "borderRadius" }
+  },
+  "typography": {
+    "fontFamilies": {
+      "sans": { "value": "Inter, sans-serif", "type": "fontFamilies" },
+      "mono": { "value": "JetBrains Mono, Fira Code, monospace", "type": "fontFamilies" }
+    },
+    "fontSizes": {
+      "xs": { "value": "11px", "type": "fontSizes" },
+      "sm": { "value": "13px", "type": "fontSizes" },
+      "base": { "value": "14px", "type": "fontSizes" },
+      "md": { "value": "16px", "type": "fontSizes" },
+      "lg": { "value": "20px", "type": "fontSizes" },
+      "xl": { "value": "24px", "type": "fontSizes" }
+    }
+  },
+  "boxShadow": {
+    "card": { "value": "0 4px 24px rgba(0, 0, 0, 0.45)", "type": "boxShadow" },
+    "quantum-glow": { "value": "0 0 16px rgba(0, 255, 255, 0.35)", "type": "boxShadow" },
+    "purple-glow": { "value": "0 0 16px rgba(123, 97, 255, 0.35)", "type": "boxShadow" }
+  }
+}

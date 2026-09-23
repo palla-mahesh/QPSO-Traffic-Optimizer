@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quantum-Inspired Intelligent Traffic Route Optimization | Egreen Quanta</title>
+  
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Custom Figma-grade CSS -->
+  <link rel="stylesheet" href="/static/css/style.css">
+  
+  <!-- Chart.js & Leaflet JS -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+  <!-- App Header -->
+  <header class="app-header">
+    <div class="brand">
+      <div class="logo-icon">
+        <i class="fa-solid fa-atom"></i>
+      </div>
+      <div>
+        <div class="brand-title-row">
+          <h1>Quantum-Inspired Traffic Route Optimization (Q-TRO)</h1>
+          <span class="version-tag">v1.2.0 • Production</span>
+        </div>
+        <p class="subtitle">Egreen Quanta • AICTE Smart India Hackathon 2026 • Quantum Technology Vertical</p>
+      </div>
+    </div>
+    <div class="header-badges">
+      <span class="badge badge-quantum"><i class="fa-solid fa-microchip"></i> QPSO Delta-Well Active</span>
+      <span class="badge badge-status" id="system-status"><i class="fa-solid fa-circle-check"></i> System Online</span>
+    </div>
+  </header>
+
+  <!-- Navigation Tabs (Figma-grade NavTabs) -->
+  <nav class="nav-tabs-bar">
+    <div class="nav-tabs-container">
+      <button class="nav-tab active" data-tab="tab-map">
+        <i class="fa-solid fa-map-location-dot"></i> Route Studio & Live Map
+      </button>
+      <button class="nav-tab" data-tab="tab-convergence">
+        <i class="fa-solid fa-chart-line"></i> Quantum Convergence Dynamics
+      </button>
+      <button class="nav-tab" data-tab="tab-benchmark">
+        <i class="fa-solid fa-scale-balanced"></i> Benchmark Matrix (PS 26137)
+      </button>
+      <button class="nav-tab" data-tab="tab-inspector">
+        <i class="fa-solid fa-network-wired"></i> Network & BPR Inspector
+      </button>
+    </div>
+    <div class="nav-actions">
+      <a href="/docs" target="_blank" class="nav-link-btn" title="Open API Documentation">
+        <i class="fa-solid fa-book"></i> API Docs
+      </a>
+      <a href="/static/figma-tokens.json" download="figma-tokens.json" class="nav-link-btn" title="Download Figma Tokens JSON">
+        <i class="fa-brands fa-figma"></i> Figma Tokens
+      </a>
+    </div>
+  </nav>
+
+  <!-- Main Application Body -->
+  <div class="main-layout">
+    <!-- Left Configuration Sidebar -->
+    <aside class="sidebar">
+      <div class="panel-section">
+        <div class="section-header">
+          <h3><i class="fa-solid fa-city"></i> Target Urban Network</h3>
+        </div>
+        <div class="control-group">
+          <label for="network-select">Road Network Preset</label>
+          <select id="network-select" class="form-select">
+            <option value="noida_sector126" selected>Noida Sector 126 (Egreen Quanta HQ & Expwy)</option>
+            <option value="solomon_c101">Solomon C101 (Clustered Customers)</option>
+            <option value="solomon_r101">Solomon R101 (Random Distribution)</option>
+            <option value="synthetic_grid">Synthetic Urban Grid (5x5 Intersections)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <div class="section-header">
+          <h3><i class="fa-solid fa-sliders"></i> Algorithm Parameters</h3>
+        </div>
+        <div class="control-group">
+          <label for="algo-select">Optimization Engine</label>
+          <select id="algo-select" class="form-select">
+            <option value="qpso" selected>Quantum-Inspired PSO (QPSO - Delta Well)</option>
+            <option value="bloch_qpso">Bloch-Sphere Qubit PSO (BQPSO)</option>
+            <option value="pso">Classical PSO (Velocity-Position)</option>
+            <option value="ga">Genetic Algorithm (Order Crossover & Inversion)</option>
+            <option value="sa">Simulated Annealing (Metropolis & 2-Opt)</option>
+            <option value="exact">Exact Solver (Branch-and-Bound / MILP)</option>
+          </select>
+        </div>
+
+        <div class="grid-2-col">
+          <div class="control-group">
+            <label for="particles-input">Swarm Size (M)</label>
+            <input type="number" id="particles-input" class="form-input" value="40" min="10" max="200" step="5">
+          </div>
+          <div class="control-group">
+            <label for="iterations-input">Iterations (T)</label>
+            <input type="number" id="iterations-input" class="form-input" value="60" min="10" max="300" step="5">
+          </div>
+        </div>
+
+        <div class="grid-2-col">
+          <div class="control-group">
+            <label for="beta-start-input">Q-CE &beta; Start</label>
+            <input type="number" id="beta-start-input" class="form-input" value="1.0" min="0.5" max="2.0" step="0.1">
+          </div>
+          <div class="control-group">
+            <label for="beta-end-input">Q-CE &beta; End</label>
+            <input type="number" id="beta-end-input" class="form-input" value="0.5" min="0.1" max="1.0" step="0.1">
+          </div>
+        </div>
+
+        <div class="action-buttons">
+          <button id="btn-optimize" class="btn btn-primary">
+            <i class="fa-solid fa-play"></i> Run Optimization
+          </button>
+          <button id="btn-benchmark" class="btn btn-secondary">
+            <i class="fa-solid fa-chart-pie"></i> Run Full Benchmark
+          </button>
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <div class="section-header">
+          <h3><i class="fa-solid fa-bolt-lightning"></i> Dynamic Traffic Disruption</h3>
+        </div>
+        <p class="section-desc">Simulate real-world bottlenecks & observe quantum re-routing</p>
+        <div class="disruption-grid">
+          <button id="btn-disrupt-accident" class="btn btn-warning">
+            <i class="fa-solid fa-car-burst"></i> Expressway Accident
+          </button>
+          <button id="btn-disrupt-rush" class="btn btn-danger">
+            <i class="fa-solid fa-gauge-high"></i> Rush Hour (+120%)
+          </button>
+          <button id="btn-disrupt-closure" class="btn btn-dark">
+            <i class="fa-solid fa-ban"></i> Road Closure
+          </button>
+          <button id="btn-clear-traffic" class="btn btn-outline">
+            <i class="fa-solid fa-rotate-left"></i> Reset Traffic
+          </button>
+        </div>
+      </div>
+
+      <div class="panel-section info-card">
+        <h4><i class="fa-solid fa-atom"></i> Quantum Advantage</h4>
+        <p>QPSO samples solution space using delta-potential wave functions with Mean Best Position ($mbest$) attractors, enabling quantum tunneling to escape classical local minima.</p>
+      </div>
+    </aside>
+
+    <!-- Main Content Workspace -->
+    <main class="content-workspace">
+      <!-- Top Metrics Banner (Always Visible) -->
+      <div class="metrics-banner">
+        <div class="metric-card">
+          <span class="metric-label">Objective Cost (Z)</span>
+          <span class="metric-val" id="metric-cost">--</span>
+          <span class="metric-sub">Weighted sum</span>
+        </div>
+        <div class="metric-card">
+          <span class="metric-label">Total Travel Time</span>
+          <span class="metric-val" id="metric-travel-time">--</span>
+          <span class="metric-sub">BPR dynamic flow</span>
+        </div>
+        <div class="metric-card">
+          <span class="metric-label">Total Distance</span>
+          <span class="metric-val" id="metric-distance">--</span>
+          <span class="metric-sub">Fleet total</span>
+        </div>
+        <div class="metric-card">
+          <span class="metric-label">Fleet Deployed</span>
+          <span class="metric-val" id="metric-vehicles">--</span>
+          <span class="metric-sub">Active vehicles</span>
+        </div>
+        <div class="metric-card">
+          <span class="metric-label">Runtime</span>
+          <span class="metric-val" id="metric-runtime">--</span>
+          <span class="metric-sub">Computation</span>
+        </div>
+        <div class="metric-card">
+          <span class="metric-label">Feasibility</span>
+          <span class="metric-val text-success" id="metric-feasibility">Verified</span>
+          <span class="metric-sub">0 Violations</span>
+        </div>
+      </div>
+
+      <!-- Tab 1: Map & Route Studio -->
+      <section id="tab-map" class="tab-pane active">
+        <div class="panel-card map-panel-card">
+          <div class="panel-header">
+            <div class="panel-title-group">
+              <h2><i class="fa-solid fa-map-location-dot"></i> Interactive Road Network & Traffic Heatmap</h2>
+              <span class="panel-subtitle">Noida Sector 126 Expressway Corridor with BPR Link Congestion</span>
+            </div>
+            <div class="map-legend">
+              <span class="legend-item"><span class="legend-dot green"></span> Free Flow (&lt;60%)</span>
+              <span class="legend-item"><span class="legend-dot yellow"></span> Moderate (60-100%)</span>
+              <span class="legend-item"><span class="legend-dot red"></span> Congested (&gt;100%)</span>
+              <span class="legend-item"><span class="legend-dot gold"></span> Central Depot</span>
+            </div>
+          </div>
+          <div id="map-container" class="map-canvas"></div>
+          
+          <!-- Live Route Breakdown Drawer -->
+          <div class="route-breakdown-bar">
+            <div class="breakdown-header">
+              <h4><i class="fa-solid fa-truck-fast"></i> Active Fleet Route Details</h4>
+              <span id="route-count-badge" class="badge-pill">0 Routes</span>
+            </div>
+            <div id="route-cards-container" class="route-cards-grid">
+              <div class="empty-route-placeholder">Run optimization to generate vehicle route schedules.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tab 2: Quantum Convergence Dynamics -->
+      <section id="tab-convergence" class="tab-pane">
+        <div class="panel-card full-height-card">
+          <div class="panel-header">
+            <div class="panel-title-group">
+              <h2><i class="fa-solid fa-chart-line"></i> Real-Time Convergence Dynamics</h2>
+              <span class="panel-subtitle">Iteration-by-iteration fitness minimization and swarm diversity</span>
+            </div>
+            <div class="chart-header-actions">
+              <span class="chart-status-badge" id="chart-status">Ready</span>
+            </div>
+          </div>
+          <div class="chart-container-large">
+            <canvas id="convergenceChart"></canvas>
+          </div>
+          <div class="chart-footer-metrics">
+            <div class="footer-stat">
+              <span class="stat-label">Initial Best Cost</span>
+              <span class="stat-val" id="stat-initial-cost">--</span>
+            </div>
+            <div class="footer-stat">
+              <span class="stat-label">Final Converged Cost</span>
+              <span class="stat-val" id="stat-final-cost">--</span>
+            </div>
+            <div class="footer-stat">
+              <span class="stat-label">Cost Reduction Rate</span>
+              <span class="stat-val text-success" id="stat-reduction-rate">--</span>
+            </div>
+            <div class="footer-stat">
+              <span class="stat-label">Convergence Iteration</span>
+              <span class="stat-val" id="stat-conv-iter">--</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tab 3: Benchmark Matrix -->
+      <section id="tab-benchmark" class="tab-pane">
+        <div class="panel-card full-height-card">
+          <div class="panel-header">
+            <div class="panel-title-group">
+              <h2><i class="fa-solid fa-scale-balanced"></i> Metaheuristic Benchmarking Matrix (PS 26137)</h2>
+              <span class="panel-subtitle">QPSO vs. Bloch-QPSO vs. Classical PSO vs. GA vs. SA vs. Exact MILP</span>
+            </div>
+            <div id="quantum-speedup-badge" class="quantum-badge-container"></div>
+            <button id="btn-export-csv" class="btn btn-sm btn-outline">
+              <i class="fa-solid fa-download"></i> Export CSV
+            </button>
+          </div>
+          <div class="table-responsive">
+            <table class="benchmark-table" id="benchmark-table">
+              <thead>
+                <tr>
+                  <th>Algorithm</th>
+                  <th>Total Cost (Z)</th>
+                  <th>Travel Time (s)</th>
+                  <th>Distance (km)</th>
+                  <th>Vehicles</th>
+                  <th>Runtime (ms)</th>
+                  <th>RPD (%)</th>
+                  <th>Relative Quality</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="benchmark-tbody">
+                <tr>
+                  <td colspan="9" class="text-center">Run a benchmark to compare QPSO against Classical Metaheuristics & Exact Solver.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tab 4: Network & BPR Inspector -->
+      <section id="tab-inspector" class="tab-pane">
+        <div class="panel-card full-height-card">
+          <div class="panel-header">
+            <div class="panel-title-group">
+              <h2><i class="fa-solid fa-network-wired"></i> Road Network & Traffic Congestion Inspector</h2>
+              <span class="panel-subtitle">Live edge capacities, volume loads, BPR travel time multipliers</span>
+            </div>
+            <input type="text" id="inspector-search" class="table-search-input" placeholder="Filter nodes / roads...">
+          </div>
+          <div class="table-responsive">
+            <table class="benchmark-table" id="inspector-table">
+              <thead>
+                <tr>
+                  <th>Edge ID</th>
+                  <th>Source &rarr; Target</th>
+                  <th>Distance (m)</th>
+                  <th>Speed Limit</th>
+                  <th>Hourly Capacity</th>
+                  <th>Live Volume</th>
+                  <th>V/C Ratio</th>
+                  <th>Congestion Level</th>
+                  <th>Travel Time (s)</th>
+                </tr>
+              </thead>
+              <tbody id="inspector-tbody">
+                <tr>
+                  <td colspan="9" class="text-center">Loading network edge data...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Scripts -->
+  <script src="/static/js/map_view.js"></script>
+  <script src="/static/js/charts.js"></script>
+  <script src="/static/js/traffic_sim.js"></script>
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
