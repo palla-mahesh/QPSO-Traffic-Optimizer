@@ -5,7 +5,9 @@
 **Theme**: Transportation & Logistics  
 **Vertical**: Quantum Technology Vertical (SIH 2026)  
 
-[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/)
+[![CI/CD Pipeline](https://github.com/psryogeshwar-14/quantum-traffic-optimization/actions/workflows/ci.yml/badge.svg)](https://github.com/psryogeshwar-14/quantum-traffic-optimization/actions/workflows/ci.yml)
+[![Tests](https://img.shields.io/badge/tests-12%20passed-brightgreen.svg)](https://github.com/psryogeshwar-14/quantum-traffic-optimization/actions)
+[![Python 3.9+](https://img.shields.io/badge/python-3.9%20%7C%203.10%20%7C%203.11-blue.svg)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-green.svg)](https://fastapi.tiangolo.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -33,44 +35,72 @@ This platform provides a complete, production-ready system implementing **Quantu
 
 ## Quick Start Guide
 
-### 1. Environment Setup
+### 1. Clone & Environment Setup
 ```bash
-# Clone repository and enter directory
-cd /Users/psryogeshwar/Downloads/MASHI
+# Clone the repository
+git clone https://github.com/psryogeshwar-14/quantum-traffic-optimization.git
+cd quantum-traffic-optimization
 
-# Create virtual environment
+# Create and activate virtual environment
 python3 -m venv .venv
-source .venv/bin/activate
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
 # Install dependencies
-.venv/bin/pip install -r backend/requirements.txt
+pip install -r backend/requirements.txt
 ```
 
-### 2. Run Automated Tests
+### 2. Run Automated Test Suite
 ```bash
-.venv/bin/pytest tests/ -v
+pytest tests/ -v
 ```
+*(All 12 unit & integration tests verify API endpoints, network BPR graphs, VRP formulation feasibility, and QPSO/Bloch-QPSO convergence).*
 
 ### 3. Run Benchmark Suite (CLI)
 ```bash
-.venv/bin/python -m backend.app.benchmark.benchmark_suite
+python3 -m backend.app.benchmark.benchmark_suite
 ```
 
-### 4. Launch Web Application & Interactive Dashboard
+### 4. Launch Interactive Web Platform
 ```bash
-.venv/bin/uvicorn backend.app.main:app --host 0.0.0.0 --port 8000 --reload
+./start.sh
+# or directly with uvicorn:
+uvicorn backend.app.main:app --host 0.0.0.0 --port 8000 --reload
 ```
-Open your browser and navigate to:
+Open your browser at **`http://localhost:8000`**.
+
+---
+
+## Free 24/7 Live Cloud Hosting (Zero-Cost Deployment)
+
+This repository is pre-configured with free deployment manifests:
+
+### Option A: Render.com (100% Free, Auto-Deploy on Git Push)
+1. Sign in to [Render Dashboard](https://dashboard.render.com/) with GitHub.
+2. Click **New +** $\to$ **Blueprint** (or **Web Service**).
+3. Connect `psryogeshwar-14/quantum-traffic-optimization`.
+4. Render automatically reads [`render.yaml`](render.yaml) and provisions the service with free HTTPS.
+
+### Option B: Hugging Face Spaces (100% Free, 16 GB RAM + 2 vCPUs)
+1. Go to [Hugging Face Spaces](https://huggingface.co/spaces) $\to$ **Create new Space**.
+2. Select **Docker** $\to$ Blank $\to$ **Free Tier (16 GB RAM)**.
+3. Connect this repository to launch an AI/Optimization demo space.
+
+### Option C: Instant Public Tunnel (No Signup / Zero Install)
+To share your local running instance with judges instantly:
+```bash
+ssh -R 80:localhost:8000 localhost.run
 ```
-http://localhost:8000
-```
+*(Generates a direct public `https://...lhr.life` link immediately).*
 
 ---
 
 ## Platform Architecture
 
 ```
-MASHI/
+quantum-traffic-optimization/
+├── .github/
+│   └── workflows/
+│       └── ci.yml                     # Automated GitHub Actions test pipeline
 ├── backend/
 │   ├── app/
 │   │   ├── main.py                    # FastAPI server (REST & WebSockets)
@@ -96,18 +126,25 @@ MASHI/
 │   │       └── benchmark_suite.py     # Multi-algorithm comparative benchmark
 │   └── requirements.txt
 ├── frontend/                          # Interactive Web UI
-│   ├── index.html                     # Dashboard HTML
-│   ├── css/style.css                  # Modern cyber-dark glassmorphism styling
+│   ├── index.html                     # Dashboard HTML (Midnight OLED theme)
+│   ├── css/style.css                  # Cyber-dark glassmorphism styling
+│   ├── figma-tokens.json              # Figma Tokens Studio integration tokens
 │   └── js/
 │       ├── app.js                     # Main UI controller & WebSocket handler
 │       ├── map_view.js                # Leaflet map rendering & route paths
 │       ├── charts.js                  # Real-time Chart.js convergence curves
 │       └── traffic_sim.js             # Traffic disruption controls
-├── tests/                             # Pytest automated test suite
+├── tests/                             # Pytest automated test suite (12 tests)
 ├── docs/                              # Technical & Mathematical Documentation
 │   ├── mathematical_formulation.md    # Rigorous LaTeX formulation
-│   └── technical_report.md            # Comprehensive project report
-└── README.md
+│   ├── technical_report.md            # Comprehensive project report
+│   ├── deployment_guide.md            # Production deployment walkthrough
+│   └── figma_design_system.md         # UI/UX & Figma design specification
+├── Dockerfile                         # Production multi-stage Docker build
+├── docker-compose.yml                 # Local container orchestration
+├── render.yaml                        # 1-click cloud blueprint
+├── Procfile                           # Cloud dyno entrypoint
+└── start.sh                           # Unified self-bootstrapping launcher
 ```
 
 ---
@@ -134,6 +171,7 @@ where:
 - `POST /api/traffic/disrupt`: Simulate traffic incidents (accidents, rush-hour volume surges, closures).
 - `POST /api/traffic/clear`: Reset network to baseline free-flow conditions.
 - `WS /ws/optimize`: Stream live iteration-by-iteration convergence metrics to client.
+- `GET /health` & `GET /api/health`: Health status endpoint for cloud load balancers.
 
 ---
 
